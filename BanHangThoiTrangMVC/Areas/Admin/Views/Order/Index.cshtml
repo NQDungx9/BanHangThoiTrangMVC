@@ -27,6 +27,19 @@
             <h3 class="card-title">Danh Sách Đơn Hàng</h3>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="card-tools">
+                    @using (Html.BeginForm("Index", "Order", FormMethod.Get, new { }))
+                    {
+                        <div class="input-group input-group-sm" style="margin-bottom:20px; padding-left:10px">
+                            @Html.TextBox("Searchtext", null, new { @class = "form-control" })
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-info btn-flat">Tìm Kiếm</button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -59,22 +72,23 @@
                                 <td>
                                     @if (item.Status == 1)
                                     {
-                                        <span>Chưa Thanh Toán</span>
+                                        <span>Đang Chuẩn Bị</span>
                                     }
                                     @if (item.Status == 2)
                                     {
-                                        <span>Đã Thanh Toán</span>
+                                        <span>Đang Giao Hàng</span>
                                     }
                                     @if (item.Status == 3)
                                     {
-                                        <span>Hoàn Thành</span>
+                                        <span>Đã Thanh Toán</span>
                                     }
                                     @if (item.Status == 4)
                                     {
-                                        <span>Hủy</span>
+                                        <span>Đã Hủy</span>
                                     }
+
                                 </td>
-                                <td>@(item.Status==1?"COD":"Chuyển Khoản")</td>
+                                <td>@(item.TypePayment==1?"COD":"Chuyển Khoản")</td>
                                 <td>
                                     <a href="/admin/order/vieworder/@item.Id" class="btn btn-sm btn-success">Xem</a>
                                     <a href="#" class="btn btn-sm btn-danger btnCapNhat" data-id="@item.Id">Cập Nhật</a>
@@ -118,13 +132,13 @@
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
                         <option value="1">
-                            Chưa thanh toán
+                            Đang Chuẩn Bị
                         </option>
                         <option value="2">
-                            Đã thanh toán
+                            Đang Giao Hàng
                         </option>
                         <option value="3">
-                            Hoàn Thành
+                            Đã Thanh Toán
                         </option>
                         <option value="4">
                             Hủy

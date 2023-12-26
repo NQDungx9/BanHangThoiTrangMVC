@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace BanHangThoiTrangMVC.Models
         public string Fullname { get; set; }
         public string Phone { get; set; }
         public List<string> RoleNames { get; set; }
+        /*public DateTimeOffset LockoutEnd { get; set; }*/
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

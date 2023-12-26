@@ -31,6 +31,21 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="card-tools">
+                <div class="card-row" style="
+                     width: 400px;
+                     padding-bottom: 10px;>
+                    @using (Html.BeginForm("Index", "Account", FormMethod.Get, new { }))
+                    {
+                        <div class="input-group input-group-sm">
+                            @Html.TextBox("Searchtext", null, new { @class = "form-control" })
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-info btn-flat">Tìm Kiếm</button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -39,8 +54,9 @@
                         <th>Họ Tên</th>
                         <th>SDT</th>
                         <th>Email</th>
+                        <th>Trạng Thái</th>
                         <th>Quyền</th>
-                        <th style="text-align:center">Trạng Thái</th>
+                        @*<th style="text-align:center">Trạng Thái</th>*@
                         <th></th>
                     </tr>
                 </thead>
@@ -50,16 +66,38 @@
                         var i = 1;
                         foreach (var item in Model)
                         {
-                            <tr>
+                            //var strCheck = item.LockoutEnabled ? "<button id=\"lockButton\" type=\"submit\" class=\"btn btn-danger\" style=\"margin-left:60px\">Lock</button>" : "<button id=\"lockButton\" type=\"submit\" class=\"btn btn-success\" style=\"margin-left:60px\">UnLock</button>";
+                            <tr id="trow_@item.Id">
                                 <td>@i</td>
                                 <td>@item.UserName</td>
                                 <td>@item.FullName</td>
                                 <td>@item.Phone</td>
                                 <td>@item.Email</td>
-                                <td>@string.Join(", ", item.Role)</td>
-                                <td><button type="button" class="btn btn-success" style="margin-left:60px">Lock</button></td>
+                                <td>
+                                    @if (item.EmailConfirmed)
+                                    {
+                                        <p>Đã Xác Thực</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Chưa Xác Thực</p>
+                                    }
+                                </td>
+                                <td>@string.Join(", ", item.Roles)</td>
+                                <!--<td>-->
+                                @*@if (item.LockoutEnabled == false)
+                                    {
+                                        <button id="lockButton" type="submit" class="btn btn-success" style="margin-left:60px">Lock</button>
+                                    }
+                                    else
+                                    {
+                                        <button id="lockButton" type="submit" class="btn btn-danger" style="margin-left:60px">UnLock</button>
+                                    }*@
+                                @*<a href='#' data-id="@item.Id" class="btnLock" style="margin:20px;">@Html.Raw(strCheck)</a>*@
+                                <!--</td>-->
                                 <td>
                                     <a href="/admin/account/edit/@item.Id" class="btn btn-sm btn btn-primary">Cập Nhật</a>
+                                    <a href="#" data-user="@item.UserName" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
                                 </td>
                             </tr>
                             i++;
@@ -91,3 +129,57 @@
 
 </section>
 <!-- /.content -->
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @*<script>
+            $(document).ready(function () {
+
+                $('body').on('click', '.btnLock', function (e) {
+                    e.preventDefault();
+                    debugger;
+                    var btn = $(this);
+                    var id = btn.data("id");
+                    var conf = confirm('Bạn Có Muốn Chỉnh Sửa Trạng Thái Này ?');
+                    if (conf == true) {
+                        $.ajax({
+                            url: '/admin/account/IsLock',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    if (rs.IsLock) {
+                                        btn.html("<button id=\"lockButton\" type=\"submit\" class=\"btn btn-danger\" style=\"margin-left:60px\">UnLock</button>");
+                                    }
+                                    else {
+                                        btn.html("<button id=\"lockButton\" type=\"submit\" class=\"btn btn-success\" style=\"margin-left:60px\">Lock</button>");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        </script>*@
+    <script>
+        $(document).ready(function () {
+            $('.btnDelete').click(function (e) {
+                e.preventDefault();
+                var user = $(this).data('user');
+                var id = $(this).data('id');
+                var conf = confirm('Bạn Có Muốn Xóa Tài Khoản Này ?');
+                if (conf == true) {
+                    $.ajax({
+                        url: '/admin/account/delete',
+                        type: 'POST',
+                        data: { user: user, id: id },
+                        success: function (res) {
+                            if (res.success) {
+                                $('#trow_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

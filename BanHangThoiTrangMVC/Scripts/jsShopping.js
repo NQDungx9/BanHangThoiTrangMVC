@@ -8,7 +8,7 @@
         if (tQuantity != '') {
             quatity = parseInt(tQuantity);
         }
-        
+
         //alert(id + " " + quatity);
         $.ajax({
             url: '/shoppingcart/addtocart',
@@ -19,11 +19,15 @@
                     $('#checkout_items').html(rs.Count);
                     alert(rs.msg);
                 }
+                else {
+                    alert(rs.msg);
+                }
             }
         });
     });
     $('body').on('click', '.btnUpdate', function (e) {
         e.preventDefault();
+        debugger;
         var id = $(this).data("id");
         var quantity = $('#Quantity_' + id).val();
         Update(id, quantity);
@@ -58,7 +62,7 @@
                 }
             });
         }
-       
+
     });
 });
 
@@ -84,7 +88,7 @@ function DeleteAll() {
         }
     });
 }
-function Update(id,quantity) {
+function Update(id, quantity) {
     $.ajax({
         url: '/shoppingcart/Update',
         type: 'POST',

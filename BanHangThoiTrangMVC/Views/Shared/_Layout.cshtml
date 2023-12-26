@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/OwlCarousel2-2.2.1/animate.css">
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/responsive.css">
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
     @Scripts.Render("~/bundles/modernizr")
@@ -42,27 +43,26 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="top_nav_left">Hotline: @SettingHelper.GetValue("SettingHotline")   ||   Email: @SettingHelper.GetValue("SettingEmail")</div>
-                            
+
                         </div>
                         <div class="col-md-6 text-right">
                             <div class="top_nav_right">
                                 <ul class="top_nav_menu">
 
                                     <!-- Currency / Language / My Account -->
-
-                                    <li class="currency">
-                                        <a href="#">
-                                            usd
-                                            <i class="fa fa-angle-down"></i>
-                                        </a>
-                                        <ul class="currency_selection">
-                                            <li><a href="#">cad</a></li>
-                                            <li><a href="#">aud</a></li>
-                                            <li><a href="#">eur</a></li>
-                                            <li><a href="#">gbp</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="language">
+                                    @*<li class="currency">
+                                            <a href="#">
+                                                usd
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                            <ul class="currency_selection">
+                                                <li><a href="#">cad</a></li>
+                                                <li><a href="#">aud</a></li>
+                                                <li><a href="#">eur</a></li>
+                                                <li><a href="#">gbp</a></li>
+                                            </ul>
+                                        </li>*@
+                                    @*<li class="language">
                                         <a href="#">
                                             English
                                             <i class="fa fa-angle-down"></i>
@@ -73,7 +73,7 @@
                                             <li><a href="#">German</a></li>
                                             <li><a href="#">Spanish</a></li>
                                         </ul>
-                                    </li>
+                                    </li>*@
                                     <li class="account">
                                         @if (!Request.IsAuthenticated)
                                         {
@@ -93,10 +93,25 @@
                                                 @User.Identity.Name
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
-                                            <ul class="account_selection">
-                                                <li><a href="#"><i class="fa fa-sign-in" aria-hidden="true"></i>Profile</a></li>
-                                                <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-user-plus" aria-hidden="true"></i>Log Out</a></li>
-                                            </ul>
+
+
+                                            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                            {
+                                                <ul class="account_selection">
+                                                    <li><a href="/admin/home"><i class="fa fa-sign-in" aria-hidden="true"></i>Admin</a></li>
+                                                    <li><a href="/account/edit/"><i class="fa fa-sign-in" aria-hidden="true"></i>Profile</a></li>
+                                                    <li><a href="/order/index"><i class="fa fa-sign-in" aria-hidden="true"></i>Orders</a></li>
+                                                    <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-user-plus" aria-hidden="true"></i>Log Out</a></li>
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <ul class="account_selection">
+                                                    <li><a href="/account/edit/"><i class="fa fa-sign-in" aria-hidden="true"></i>Profile</a></li>
+                                                    <li><a href="/order/index"><i class="fa fa-sign-in" aria-hidden="true"></i>Orders</a></li>
+                                                    <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-user-plus" aria-hidden="true"></i>Log Out</a></li>
+                                                </ul>
+                                            }
                                         }
                                     </li>
                                 </ul>
@@ -120,13 +135,13 @@
                     <div class="row">
                         <div class="col-lg-12 text-right">
                             <div class="logo_container">
-                                <a href="/home">colo<span>shop</span></a>
+                                <a href="/home">Light  Novel<span> Works</span></a>
                             </div>
                             <nav class="navbar">
                                 @Html.Action("MenuTop", "Menu")
                                 <ul class="navbar_user">
-                                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    @*<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>*@
                                     <li class="checkout">
                                         <a href="/gio-hang">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -150,7 +165,7 @@
             <div class="hamburger_close"><i class="fa fa-times" aria-hidden="true"></i></div>
             <div class="hamburger_menu_content text-right">
                 <ul class="menu_top_nav">
-                    <li class="menu_item has-children">
+                    @*<li class="menu_item has-children">
                         <a href="#">
                             usd
                             <i class="fa fa-angle-down"></i>
@@ -161,8 +176,8 @@
                             <li><a href="#">eur</a></li>
                             <li><a href="#">gbp</a></li>
                         </ul>
-                    </li>
-                    <li class="menu_item has-children">
+                    </li>*@
+                    @*<li class="menu_item has-children">
                         <a href="#">
                             English
                             <i class="fa fa-angle-down"></i>
@@ -173,7 +188,7 @@
                             <li><a href="#">German</a></li>
                             <li><a href="#">Spanish</a></li>
                         </ul>
-                    </li>
+                    </li>*@
                     <li class="menu_item has-children">
                         <a href="#">
                             My Account
@@ -212,7 +227,7 @@
                             <ul class="footer_nav">
                                 <li><a href="#">Blog</a></li>
                                 <li><a href="#">FAQs</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="/lien-he">Contact us</a></li>
                             </ul>
                         </div>
                     </div>
@@ -231,7 +246,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="footer_nav_container">
-                            <div class="cr">©2018 All Rights Reserverd. Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="#">Colorlib</a> &amp; distributed by <a href="https://themewagon.com">ThemeWagon</a></div>
+                            @*<div class="cr">©2018 All Rights Reserverd. Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="#">Colorlib</a> &amp; distributed by <a href="https://themewagon.com">ThemeWagon</a></div>*@
                         </div>
                     </div>
                 </div>
@@ -241,7 +256,11 @@
     </div>
 
 
-
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger intent="WELCOME"
+                  chat-title="Novel&#x27;s-Gate"
+                  agent-id="81a528ab-5b64-40ef-bee0-b60cf3468fe9"
+                  language-code="vi"></df-messenger>
     <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
     <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
     <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>

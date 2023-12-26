@@ -1,4 +1,5 @@
 ﻿using BanHangThoiTrangMVC.Models;
+using BanHangThoiTrangMVC.Models.EF;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,21 @@ using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Admin/Order
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string Searchtext)
         {
-            var items = db.Orders.OrderByDescending(x => x.CreateDate).ToList();
+            IEnumerable<Order> items = db.Orders.OrderByDescending(x => x.CreateDate).ToList();
+            items = items.Where(x => x.TotalAmount > 0);
             if (page == null)
             {
                 page = 1;
+            }
+            if (!string.IsNullOrEmpty(Searchtext))
+            {
+                items = items.Where(x => x.Code.ToLower().Contains(Searchtext) || x.CustomerName.ToLower().Contains(Searchtext));
             }
             var pageNumber = page ?? 1;
             var pageSize = 10;

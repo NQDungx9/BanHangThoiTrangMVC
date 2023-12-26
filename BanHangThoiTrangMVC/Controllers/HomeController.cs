@@ -28,9 +28,14 @@ namespace BanHangThoiTrangMVC.Controllers
             {
                 db.Subscribes.Add(new Subscribe { Email = req.Email, CreateDate = DateTime.Now });
                 db.SaveChanges();
+                string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/newemail/new-email.html"));
+                contentCustomer = contentCustomer.Replace("{{NgayDangKy}}", DateTime.Now.ToString("dd/MM/yyyy"));
+                contentCustomer = contentCustomer.Replace("{{Email}}", req.Email);
+                BanHangThoiTrangMVC.Common.Common.SendMail("Đăng ký Thành Viên", req.Email , contentCustomer.ToString(), req.Email);
                 return Json(new { Success = true });
             }
-            return View("Partial_Subcribe", req);
+            /*return View("Partial_Subcribe", req);*/
+            return View();
         }
         public ActionResult About()
         {

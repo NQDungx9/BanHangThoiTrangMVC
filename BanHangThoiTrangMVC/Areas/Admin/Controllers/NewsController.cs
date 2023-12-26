@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Employee")]
+    [Authorize(Roles = "Admin,Employee,Translators")]
     public class NewsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -26,7 +26,7 @@ namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
             IEnumerable<News> items = db.News.OrderByDescending(x => x.Id);
             if (!string.IsNullOrEmpty(Searchtext))
             {
-                items = items.Where(x => x.Alias.Contains(Searchtext) || x.Title.Contains(Searchtext));
+                items = items.Where(x => x.Alias.ToLower().Contains(Searchtext) || x.Title.ToLower().Contains(Searchtext));
             }
             var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             items = items.ToPagedList(pageIndex, pageSize);

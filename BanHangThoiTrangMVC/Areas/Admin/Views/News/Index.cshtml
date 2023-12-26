@@ -1,7 +1,7 @@
 ﻿@model PagedList.IPagedList<BanHangThoiTrangMVC.Models.EF.News>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Danh Sách Tin Tức";
+    ViewBag.Title = "Danh Sách Novel, Manga và Sách";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -29,7 +29,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
-                    <li class="breadcrumb-item active">Danh Sách Tin Tức</li>
+                    <li class="breadcrumb-item active">Danh Sách Novel</li>
                 </ol>
             </div>
         </div>
@@ -192,6 +192,7 @@
             });
             $('body').on('click', '.btnActive', function (e) {
                 e.preventDefault();
+                debugger;
                 var btn = $(this);
                 var id = btn.data("id");
                 var conf = confirm('Bạn Có Muốn Chỉnh Sửa Trạng Thái Này ?');
@@ -209,11 +210,9 @@
                                     btn.html("<i class='fas fa-times text-danger'></i>");
                                 }
                             }
-
                         }
                     });
                 }
-
             });
         });
     </script>

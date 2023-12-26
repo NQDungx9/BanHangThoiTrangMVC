@@ -79,13 +79,13 @@
                         @switch (Model.Status)
                         {
                             case 1:
-                                <p class="form-control">Chưa thanh toán</p>
+                                <p class="form-control">Đang Chuẩn Bị</p>
                                 break;
                             case 2:
-                                <p class="form-control">Đã thanh toán</p>
+                                <p class="form-control">Đang Giao Hàng</p>
                                 break;
                             case 3:
-                                <p class="form-control">Hoàn Thành</p>
+                                <p class="form-control">Đã Thanh Toán</p>
                                 break;
                             case 4:
                                 <p class="form-control">Hủy</p>
@@ -107,6 +107,10 @@
                 <div class="col-12">
                     @Html.Action("Partial_SanPham", "Order", new { id = Model.Id })
                 </div>
+            </div>
+            <div class="form-group">
+
+                <a href="/admin/order" class="btn btn-danger">Quay Lại</a>
             </div>
         </div>
         <!-- /.card-body -->

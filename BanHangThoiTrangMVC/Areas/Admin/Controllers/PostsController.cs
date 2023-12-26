@@ -31,7 +31,7 @@ namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 model.CreateDate = DateTime.Now;
-                model.CategoryId = 5;
+                model.CategoryId = 4;
                 model.ModifiedDate = DateTime.Now;
                 model.Alias = BanHangThoiTrangMVC.Models.Common.Filter.FilterChar(model.Title);
                 db.Posts.Add(model);

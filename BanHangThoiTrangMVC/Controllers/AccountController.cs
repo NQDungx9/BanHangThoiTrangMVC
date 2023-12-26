@@ -9,12 +9,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BanHangThoiTrangMVC.Models;
+using Facebook;
+using System.Configuration;
 
 namespace BanHangThoiTrangMVC.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -52,8 +55,22 @@ namespace BanHangThoiTrangMVC.Controllers
             }
         }
 
+        //private Uri RedirectUri
+        //{
+        //    get
+        //    {
+        //        var uriBuilder = new UriBuilder(Request.Url);
+        //        uriBuilder.Query = null;
+        //        uriBuilder.Fragment = null;
+        //        uriBuilder.Path = Url.Action("FacebookCallback");
+        //        return uriBuilder.Uri;
+        //    }
+        //}
+
         //
         // GET: /Account/Login
+
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -66,6 +83,7 @@ namespace BanHangThoiTrangMVC.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -73,6 +91,12 @@ namespace BanHangThoiTrangMVC.Controllers
                 return View(model);
             }
 
+            var user = await UserManager.FindByEmailAsync(model.UserName);
+            if (user != null && !user.EmailConfirmed)
+            {
+                ModelState.AddModelError(string.Empty, "Bạn cần xác nhận email trước khi đăng nhập.");
+                return View(model);
+            }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
@@ -86,10 +110,82 @@ namespace BanHangThoiTrangMVC.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Sai Tên Đăng Nhập Hoặc Mật Khẩu");
                     return View(model);
             }
         }
+
+        /*[HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]*/
+        /*public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await UserManager.FindByEmailAsync(model.UserName);
+            if (user != null && !user.EmailConfirmed)
+            {
+                ModelState.AddModelError(string.Empty, "Bạn cần xác nhận email trước khi đăng nhập.");
+                return View(model);
+            }
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe,shouldLockout: true);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Sai Tên Đăng Nhập Hoặc Mật Khẩu");
+                    return View(model);
+            }
+        }*/
+        ///Account/LoginFacebook
+        ///
+        //public ActionResult LoginFaceBook()
+        //{
+        //    var fb = new FacebookClient();
+        //    var loginURL = fb.GetLoginUrl(new
+        //    {
+        //        client_id = ConfigurationManager.AppSettings["FbAppId"],
+        //        client_secret = ConfigurationManager.AppSettings["FbAppSecret"],
+        //        redirect_uri = RedirectUri.AbsoluteUri,
+        //        response_type = "code",
+        //        scope = "email",
+        //    });
+        //    return Redirect(loginURL.AbsoluteUri);
+        //}
+        //public ActionResult FacebookCallback(string code)
+        //{
+        //    var fb = new FacebookClient();
+        //    dynamic result = fb.Post("oauth/access_token", new
+        //    {
+        //        client_id = ConfigurationManager.AppSettings["FbAppId"],
+        //        client_secret = ConfigurationManager.AppSettings["FbAppSecret"],
+        //        redirect_uri = RedirectUri.AbsoluteUri,
+        //        code = code,
+        //    });
+        //    var accessToken = result.access_token;
+        //    if (!string.IsNullOrEmpty(accessToken))
+        //    {
+        //        dynamic me = fb.Get("me?fields=first_name,middle_name,last_name,id,email");
+        //        string email = me.email;
+        //        string username = me.email;
+        //        string firstname = me.first_name;
+        //        string middlename = me.middle_name;
+        //        string lastname = me.last_name;
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //}
 
         //
         // GET: /Account/VerifyCode
@@ -163,9 +259,9 @@ namespace BanHangThoiTrangMVC.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("Login", "Account");
                 }
@@ -206,7 +302,7 @@ namespace BanHangThoiTrangMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
@@ -215,10 +311,10 @@ namespace BanHangThoiTrangMVC.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -252,7 +348,7 @@ namespace BanHangThoiTrangMVC.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
@@ -371,7 +467,7 @@ namespace BanHangThoiTrangMVC.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Fullname = model.FullName };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -396,6 +492,11 @@ namespace BanHangThoiTrangMVC.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            ShoppingCart cart = (ShoppingCart)Session["Cart"];
+            if (cart != null)
+            {
+                cart.ClearCart();
+            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -445,6 +546,32 @@ namespace BanHangThoiTrangMVC.Controllers
             {
                 ModelState.AddModelError("", error);
             }
+        }
+        //Chỉnh sửa 
+        public async Task<ActionResult> Edit()
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            var item = new CreateAccountViewModel();
+            item.UserName = user.UserName;
+            item.Email = user.Email;
+            item.FullName = user.Fullname;
+            item.Phone = user.Phone;
+            return View(item);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(CreateAccountViewModel req)
+        {
+            var user = await UserManager.FindByEmailAsync(req.Email);
+            user.UserName = req.UserName;
+            user.Fullname = req.FullName;
+            user.Phone = req.Phone;
+            var rs = await UserManager.UpdateAsync(user);
+            if (rs.Succeeded)
+            {
+                return RedirectToAction("Edit");
+            }
+            return View(req);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

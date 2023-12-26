@@ -1,8 +1,5 @@
 ﻿using BanHangThoiTrangMVC.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Controllers
@@ -10,6 +7,7 @@ namespace BanHangThoiTrangMVC.Controllers
     public class MenuController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Menu
         public ActionResult Index()
         {
@@ -27,7 +25,7 @@ namespace BanHangThoiTrangMVC.Controllers
             var items = db.ProductCategories.ToList();
             return PartialView("_MenuProductCategory", items);
         }
-        
+
         public ActionResult MenuLeft(int? id)
         {
             var items = db.ProductCategories.ToList();

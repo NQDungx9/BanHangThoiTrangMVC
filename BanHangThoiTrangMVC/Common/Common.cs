@@ -51,6 +51,8 @@ namespace BanHangThoiTrangMVC.Common
             }
             return rs;
         }
+
+
         public static string FormatNumber(object value, int SoSauDauPhay = 2)
         {
             bool isNumber = IsNumeric(value);

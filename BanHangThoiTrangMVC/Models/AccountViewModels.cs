@@ -9,6 +9,10 @@ namespace BanHangThoiTrangMVC.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -68,24 +72,25 @@ namespace BanHangThoiTrangMVC.Models
         public string FullName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public List<string> Role { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public List<string> Roles { get; set; }
     }
 
-    public class EditAccountViewModel
-    {
-        [Required]
-        public string UserName { get; set; }
-        [Required]
-        public string FullName { get; set; }
-        [Required]
-        public string Phone { get; set; }
-        [Required]
-        public string Role { get; set; }
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-    }
+    //public class EditAccountViewModel
+    //{
+    //    [Required]
+    //    public string UserName { get; set; }
+    //    [Required]
+    //    public string FullName { get; set; }
+    //    [Required]
+    //    public string Phone { get; set; }
+    //    [Required]
+    //    public string Role { get; set; }
+    //    [Required]
+    //    [EmailAddress]
+    //    [Display(Name = "Email")]
+    //    public string Email { get; set; }
+    //}
 
     public class CreateAccountViewModel
     {
@@ -96,7 +101,7 @@ namespace BanHangThoiTrangMVC.Models
         [Required]
         public string Phone { get; set; }
         [Required]
-        public string Role { get; set; }
+        public List<string> Roles { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -112,6 +117,27 @@ namespace BanHangThoiTrangMVC.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+    public class EditAccountViewModel
+    {
+        [Required]
+        public string UserName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        [Required]
+        public List<string> Roles { get; set; }
+        public string SelectedRole { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class ApllicationViewModel
+    {
+
     }
     public class RegisterViewModel
     {

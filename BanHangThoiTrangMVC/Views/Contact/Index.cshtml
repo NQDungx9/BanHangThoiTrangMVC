@@ -1,4 +1,4 @@
-﻿
+﻿@using BanHangThoiTrangMVC.Common
 @{
     ViewBag.Title = "Thông Tin Liên Hệ";
 }
@@ -26,8 +26,8 @@
     <div class="row">
         <div class="col">
             <h3>Thông tin liên hệ</h3>
-            <p>Tên: Dũng</p>
-            <p>SDT: 0905.452.702</p>
+            <p>Tên: Nguyễn Quốc Dũng</p>
+            <p>SDT: @SettingHelper.GetValue("SettingHotline")</p>
             <p>Email: dnguen82@gmail.com</p>
         </div>
         <div class="col">

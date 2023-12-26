@@ -34,7 +34,7 @@ namespace BanHangThoiTrangMVC
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -55,14 +55,14 @@ namespace BanHangThoiTrangMVC
             //   consumerSecret: "");
 
             //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            //   appId: "732231605374424",
+            //   appSecret: "7d8e46403cd0d67dc237868b142069d8");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "3690397711-odr0u447na52dvkrjs8h0uh9323cprko.apps.googleusercontent.com",
+                ClientSecret = "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"
+            });
         }
     }
 }

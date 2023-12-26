@@ -10,5 +10,6 @@ namespace BanHangThoiTrangMVC
         {
             ConfigureAuth(app);
         }
+        
     }
 }

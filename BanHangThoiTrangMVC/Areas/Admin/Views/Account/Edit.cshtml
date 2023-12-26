@@ -1,6 +1,6 @@
-﻿@model BanHangThoiTrangMVC.Models.ApplicationUser
+﻿@model BanHangThoiTrangMVC.Models.EditAccountViewModel
 @{
-    ViewBag.Title = "Cập Nhặt Tài Khoản";
+    ViewBag.Title = "Cập Nhật Tài Khoản";
 }
 @section naviheader{
     <!-- Left navbar links -->
@@ -48,40 +48,34 @@
             <div class="bs-stepper-content">
                 @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { }))
                 {
+                    @Html.ValidationSummary(false)
                     @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true)
-                    @Html.HiddenFor(x => x.Id)//Để gọi được Id cần chọn trong table
+                    @*@Html.HiddenFor(x => x.Id)//Để gọi được Id cần chọn trong table*@
                     <!-- your steps content here -->
                     <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
-                        @*<div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Tên Tài Khoản</label>
-                                    <p class="form-control">@Model.UserName</p>
-                                </div>
-                            </div>*@
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Tên Tài Khoản</label>
-                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "Tên Tài Khoản" })
+                            <label for="exampleInput">Tên Tài Khoản</label>
+                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "Tên Tài Khoản", @readonly = "readonly" })
                             @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Họ Và Tên</label>
-                            @Html.TextBoxFor(x => x.Fullname, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.Fullname, null, new { @class = "text-danger" })
+                            <label for="exampleInput">Họ Và Tên</label>
+                            @Html.TextBoxFor(x => x.FullName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.FullName, null, new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Số Điện Thoại</label>
+                            <label for="exampleInput">Số Điện Thoại</label>
                             @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.Phone, null, new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Email</label>
+                            <label for="exampleInput">Email</label>
                             @Html.TextAreaFor(x => x.Email, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.Email, null, new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Quyền</label>
-                            @Html.DropDownListFor(x => x.Roles, ViewBag.Role as IEnumerable<SelectListItem>, "-Chọn Quyền Hạn-", new { @class = "form-control" })
+                            <label for="exampleInput">Quyền</label>
+                            @Html.DropDownListFor(x => x.Roles, ViewBag.Role as SelectList, "-Chọn Quyền-", new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.Roles, null, new { @class = "text-danger" })
                         </div>
                         <div class="form-group">

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Employee")]
+    [Authorize(Roles = "Admin,Employee,Translators")]
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

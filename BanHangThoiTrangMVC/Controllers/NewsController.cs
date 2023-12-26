@@ -4,7 +4,6 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Controllers
@@ -12,10 +11,11 @@ namespace BanHangThoiTrangMVC.Controllers
     public class NewsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: News
-        public ActionResult Index(int? page)
+        public ActionResult Index(string Searchtext, int? page)
         {
-            var pageSize = 5;
+            /*var pageSize = 5;
             if (page == null)
             {
                 page = 1;
@@ -25,11 +25,31 @@ namespace BanHangThoiTrangMVC.Controllers
             items = items.ToPagedList(pageIndex, pageSize);
             ViewBag.PageSize = pageSize;
             ViewBag.Page = page;
+            return View(items);*/
+            var pageSize = 5;
+            if (page == null)
+            {
+                page = 1;
+            }
+            IEnumerable<News> items = db.News.OrderByDescending(x => x.Id);
+            if (!string.IsNullOrEmpty(Searchtext))
+            {
+                Searchtext = Searchtext.ToLower(); // Chuyển đổi searchText về lower case
+                items = items.Where(x => x.Alias.ToLower().Contains(Searchtext) || x.Title.ToLower().Contains(Searchtext));
+            }
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            items = items.ToPagedList(pageIndex, pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.Page = page;
             return View(items);
         }
+
         public ActionResult Detail(int id)
         {
             var item = db.News.Find(id);
+            item.ViewCount = item.ViewCount + 1;
+            db.Entry(item).Property(x => x.ViewCount).IsModified = true;
+            db.SaveChanges();
             return View(item);
         }
 

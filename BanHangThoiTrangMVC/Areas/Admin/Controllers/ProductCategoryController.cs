@@ -8,10 +8,12 @@ using System.Web.Mvc;
 
 namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductCategoryController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Admin/ProductCategory
+        
         public ActionResult Index()
         {
             var items = db.ProductCategories;

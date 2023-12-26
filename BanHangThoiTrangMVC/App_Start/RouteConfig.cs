@@ -47,9 +47,10 @@ namespace BanHangThoiTrangMVC
                 namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
             );
 
+            //Artical controller
             routes.MapRoute(
                 name: "BaiViet",
-                url: "bai-viet/{alias}",
+                url: "bai-viet",
                 defaults: new { controller = "Article", action = "Index", id = UrlParameter.Optional },
                 namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
             );
@@ -61,20 +62,27 @@ namespace BanHangThoiTrangMVC
                 namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
             );
 
+            //News
             routes.MapRoute(
                 name: "News",
-                url: "tin-tuc",
+                url: "cong-novels",
                 defaults: new { controller = "News", action = "Index", alias = UrlParameter.Optional },
                 namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
             );
 
             routes.MapRoute(
                 name: "DetailNews",
-                url: "chi-tiet-tin-tuc/{alias}-n{id}",
+                url: "chi-tiet-novel/{alias}-n{id}",
                 defaults: new { controller = "News", action = "Detail", id = UrlParameter.Optional },
                 namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
             );
-
+            //chi tiết bài viết
+            routes.MapRoute(
+                name: "DetailPost",
+                url: "chi-tiet-bai-viet/{alias}-n{id}",
+                defaults: new { controller = "Article", action = "Detail", id = UrlParameter.Optional },
+                namespaces: new[] { "BanHangThoiTrangMVC.Controllers" }
+            );
             routes.MapRoute(
                 name: "DetailProduct",
                 url: "chi-tiet/{alias}-p{id}",

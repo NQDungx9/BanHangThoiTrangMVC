@@ -1,5 +1,6 @@
 ﻿using BanHangThoiTrangMVC.Models;
 using BanHangThoiTrangMVC.Models.EF;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +13,27 @@ namespace BanHangThoiTrangMVC.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Products
-        public ActionResult Index(string Searchtext, int? id)
+        public ActionResult Index(string Searchtext, int? id, int? page)
         {
             /*var items = db.Products.Where(x => x.IsActive).Take(12).ToList();*/
-            IEnumerable<Product> items = db.Products.OrderByDescending(x => x.Id);
-            items = items.Where(x => x.IsActive).Take(12).ToList();
-            /*if (id != null)
+            var pageSize = 8;
+            if (page == null)
             {
-                items = items.Where(x => x.ProductCategoryId == id).ToList();
-            }*/
-            if (!string.IsNullOrEmpty(Searchtext))
-            {
-                items = items.Where(x => x.Alias.Contains(Searchtext) || x.Title.Contains(Searchtext));
+                page = 1;
             }
+            IEnumerable<Product> items = db.Products.OrderByDescending(x => x.Id);
+            if (!string.IsNullOrEmpty(Searchtext))
+            /*{
+                items = items.Where(x => x.Alias.Contains(Searchtext) || x.Title.Contains(Searchtext));
+            }*/
+            {
+                Searchtext = Searchtext.ToLower(); // Chuyển đổi searchText về lower case
+                items = items.Where(x => x.Alias.ToLower().Contains(Searchtext) || x.Title.ToLower().Contains(Searchtext));
+            }
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            items = items.ToPagedList(pageIndex, pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.Page = page;
             return View(items);
         }
 
@@ -71,6 +80,12 @@ namespace BanHangThoiTrangMVC.Controllers
                 db.SaveChanges();
             }
             return View(item);
+        }
+
+        public ActionResult Partial_ProductHot()
+        {
+            var item = db.Products.Where(x => x.IsHot).Take(1).ToList();
+            return PartialView(item);
         }
     }
 }

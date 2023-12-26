@@ -1,4 +1,4 @@
-/* JS Document */
+﻿/* JS Document */
 
 /******************************
 
@@ -49,7 +49,7 @@ jQuery(document).ready(function($)
 
 	initMenu();
 	initThumbnail();
-	initQuantity();
+	/*initQuantity();*/
 	initStarRating();
 	initFavorite();
 	initTabs();
@@ -206,7 +206,7 @@ jQuery(document).ready(function($)
 
 	*/
 
-	function initQuantity()
+	/*function initQuantity()
 	{
 		if($('.plus').length && $('.minus').length)
 		{
@@ -229,7 +229,7 @@ jQuery(document).ready(function($)
 				}
 			});
 		}
-	}
+	}*/
 
 	/* 
 

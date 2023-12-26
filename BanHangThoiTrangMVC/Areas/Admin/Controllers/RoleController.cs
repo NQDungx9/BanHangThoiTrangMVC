@@ -85,7 +85,7 @@ namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> DeleteAsync(string id)
         {
             var item = db.Roles.Find(id);
             if (item != null)
@@ -95,20 +95,6 @@ namespace BanHangThoiTrangMVC.Areas.Admin.Controllers
                 return Json(new { success = true });
             }
             return Json(new { success = false });
-            /*var item = db.Roles.Find(id);
-            if (ModelState.IsValid)
-            {
-                if (item != null)
-                {
-                    db.Roles.Remove(item);
-                    db.SaveChanges();
-                    return Json(new { success = true });
-                }
-                
-            }
-            return Json(new { success = false });*/
-
-            /*var role = roleManager.Delete(id);*/
         }
     }
 }
